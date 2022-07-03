@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/matheus-dr/go-test/dto"
 	"github.com/matheus-dr/go-test/services"
@@ -17,18 +19,35 @@ type AuthorController struct {
 func (c AuthorController) Handle(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
-		c.CreateAuthor(w, r)
+		c.createAuthor(w, r)
 
-		// TODO: change this to GET AND Receive a param that is an ID
 	case http.MethodGet:
-		c.ListAllAuthors(w, r)
+		c.listAllAuthors(w, r)
 
 	default:
 		fmt.Println("Unknown method:", r.Method)
+		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
-func (c AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
+func (c AuthorController) HandleParams(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		c.findOneAuthor(w, r)
+
+	case http.MethodPut:
+		c.updateAuthor(w, r)
+
+	case http.MethodDelete:
+		c.deleteAuthor(w, r)
+
+	default:
+		fmt.Println("Unknown method:", r.Method)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func (c AuthorController) createAuthor(w http.ResponseWriter, r *http.Request) {
 	input, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
@@ -37,7 +56,7 @@ func (c AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
 	var data dto.CreateAuthorDto
 	err = json.Unmarshal(input, &data)
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 
 	c.Service.CreateAuthor(data)
@@ -45,8 +64,58 @@ func (c AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (c AuthorController) ListAllAuthors(w http.ResponseWriter, r *http.Request) {
+func (c AuthorController) listAllAuthors(w http.ResponseWriter, r *http.Request) {
 	output := c.Service.ListAllAuthors()
 
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
+}
+
+func (c AuthorController) findOneAuthor(w http.ResponseWriter, r *http.Request) {
+	idParam := r.URL.Query().Get("id")
+
+	id, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	output := c.Service.FindOneAuthor(uint(id))
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(output)
+}
+
+func (c AuthorController) updateAuthor(w http.ResponseWriter, r *http.Request) {
+	idParam := r.URL.Query().Get("id")
+
+	id, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	input, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	var data dto.UpdateAuthorDto
+	err = json.Unmarshal(input, &data)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	c.Service.UpdateAuthor(uint(id), data)
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func (c AuthorController) deleteAuthor(w http.ResponseWriter, r *http.Request) {
+	idParam := r.URL.Query().Get("id")
+
+	id, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	c.Service.DeleteAuthor(uint(id))
 }

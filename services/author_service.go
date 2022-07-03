@@ -1,6 +1,8 @@
 package services
 
 import (
+	"log"
+
 	"github.com/matheus-dr/go-test/dto"
 	"github.com/matheus-dr/go-test/entities"
 	"github.com/matheus-dr/go-test/repositories"
@@ -30,4 +32,30 @@ func (s AuthorService) ListAllAuthors() []dto.ListAuthorDto {
 	}
 
 	return authorsToReturn
+}
+
+func (s AuthorService) FindOneAuthor(id uint) dto.FindAuthorDto {
+	author, err := s.Repository.FindOneAuthor(id)
+	if err != nil {
+		log.Panic(err)
+		return dto.FindAuthorDto(author)
+	}
+
+	return dto.FindAuthorDto(author)
+}
+
+func (s AuthorService) UpdateAuthor(id uint, data dto.UpdateAuthorDto) {
+	input := entities.Author{FirstName: data.FirstName, LastName: data.LastName}
+
+	err := s.Repository.UpdateAuthor(id, input)
+	if err != nil {
+		log.Panic(err)
+	}
+}
+
+func (s AuthorService) DeleteAuthor(id uint) {
+	err := s.Repository.DeleteAuthor(id)
+	if err != nil {
+		log.Panic(err)
+	}
 }

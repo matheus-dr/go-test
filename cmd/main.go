@@ -12,6 +12,7 @@ func main() {
 	authorController := factories.AuthorFactory()
 
 	router.HandleFunc("/author", authorController.Handle)
+	router.HandleFunc("/author/id", authorController.HandleParams)
 
 	http.ListenAndServe(":8080", router)
 }
