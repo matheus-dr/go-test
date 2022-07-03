@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -10,7 +11,21 @@ import (
 )
 
 type AuthorController struct {
-	service services.AuthorService
+	Service services.AuthorService
+}
+
+func (c AuthorController) Handle(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		c.CreateAuthor(w, r)
+
+		// TODO: change this to GET AND Receive a param that is an ID
+	case http.MethodGet:
+		c.ListAllAuthors(w, r)
+
+	default:
+		fmt.Println("Unknown method:", r.Method)
+	}
 }
 
 func (c AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
@@ -22,5 +37,13 @@ func (c AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
 	var data dto.CreateAuthorDto
 	json.Unmarshal(input, &data)
 
-	c.service.CreateAuthor(data)
+	c.Service.CreateAuthor(data)
+
+	w.WriteHeader(http.StatusCreated)
+}
+
+func (c AuthorController) ListAllAuthors(w http.ResponseWriter, r *http.Request) {
+	output := c.Service.ListAllAuthors()
+
+	json.NewEncoder(w).Encode(output)
 }

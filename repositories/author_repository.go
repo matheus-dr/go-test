@@ -1,17 +1,26 @@
 package repositories
 
 import (
-	"github.com/matheus-dr/go-test/dto"
+	"time"
+
 	"github.com/matheus-dr/go-test/entities"
 )
 
 type AuthorRepository struct {
-	authorId int
+	authorId uint
 	Authors  []entities.Author
 }
 
-func (a AuthorRepository) CreateAuthor(input dto.CreateAuthorDto) {
-	a.authorId += 1
-	print(a.authorId, "author created")
-	// TODO: check how create an author in slice
+func (r AuthorRepository) CreateAuthor(author entities.Author) {
+	r.authorId += 1
+
+	author.Id = r.authorId
+	author.CreatedAt = time.Now().UTC()
+	author.UpdatedAt = time.Now().UTC()
+
+	r.Authors = append(r.Authors, author)
+}
+
+func (r AuthorRepository) ListAllAuthors() []entities.Author {
+	return r.Authors
 }

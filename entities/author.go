@@ -1,9 +1,11 @@
 package entities
 
+import "time"
+
 type Author struct {
-	Id        int8
+	Id        uint
 	FirstName string
 	LastName  string
-	CreatedAt string
-	UpdatedAt string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
