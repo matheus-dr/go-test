@@ -7,10 +7,11 @@ import (
 
 type AuthorRepository struct {
 	authorId int
-	authors  []entities.Author
+	Authors  []entities.Author
 }
 
 func (a AuthorRepository) CreateAuthor(input dto.CreateAuthorDto) {
 	a.authorId += 1
 	print(a.authorId, "author created")
+	// TODO: check how create an author in slice
 }
