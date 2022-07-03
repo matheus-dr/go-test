@@ -3,24 +3,29 @@ package repositories
 import (
 	"time"
 
+	"github.com/matheus-dr/go-test/database"
 	"github.com/matheus-dr/go-test/entities"
 )
 
 type AuthorRepository struct {
-	authorId uint
-	Authors  []entities.Author
+	fakeDb database.DatabaseStruct
 }
 
-func (r AuthorRepository) CreateAuthor(author entities.Author) {
-	r.authorId += 1
+var (
+	IN_MEMORY_AUTHOR_REPOSITORY = AuthorRepository{fakeDb: database.Database}
+)
 
-	author.Id = r.authorId
+func (r AuthorRepository) CreateAuthor(author entities.Author) {
+
+	IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorId += 1
+
+	author.Id = IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorId
 	author.CreatedAt = time.Now().UTC()
 	author.UpdatedAt = time.Now().UTC()
 
-	r.Authors = append(r.Authors, author)
+	IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorTable.Authors = append(IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorTable.Authors, author)
 }
 
 func (r AuthorRepository) ListAllAuthors() []entities.Author {
-	return r.Authors
+	return IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.Authors
 }

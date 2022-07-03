@@ -35,7 +35,10 @@ func (c AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var data dto.CreateAuthorDto
-	json.Unmarshal(input, &data)
+	err = json.Unmarshal(input, &data)
+	if err != nil {
+		panic(err)
+	}
 
 	c.Service.CreateAuthor(data)
 
