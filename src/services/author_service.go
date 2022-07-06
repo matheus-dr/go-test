@@ -1,11 +1,10 @@
 package services
 
 import (
+	"github.com/matheus-dr/go-test/src/dto"
+	"github.com/matheus-dr/go-test/src/entities"
+	"github.com/matheus-dr/go-test/src/repositories"
 	"log"
-
-	"github.com/matheus-dr/go-test/dto"
-	"github.com/matheus-dr/go-test/entities"
-	"github.com/matheus-dr/go-test/repositories"
 )
 
 type AuthorService struct {
@@ -38,7 +37,6 @@ func (s AuthorService) FindOneAuthor(id uint) dto.FindAuthorDto {
 	author, err := s.Repository.FindOneAuthor(id)
 	if err != nil {
 		log.Panic(err)
-		return dto.FindAuthorDto(author)
 	}
 
 	return dto.FindAuthorDto(author)

@@ -1,9 +1,9 @@
 package factories
 
 import (
-	"github.com/matheus-dr/go-test/controllers"
-	"github.com/matheus-dr/go-test/repositories"
-	"github.com/matheus-dr/go-test/services"
+	"github.com/matheus-dr/go-test/src/controllers"
+	"github.com/matheus-dr/go-test/src/repositories"
+	"github.com/matheus-dr/go-test/src/services"
 )
 
 func AuthorFactory() controllers.AuthorController {

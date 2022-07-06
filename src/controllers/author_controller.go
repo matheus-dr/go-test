@@ -3,13 +3,12 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/matheus-dr/go-test/src/dto"
+	"github.com/matheus-dr/go-test/src/services"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
-
-	"github.com/matheus-dr/go-test/dto"
-	"github.com/matheus-dr/go-test/services"
 )
 
 type AuthorController struct {
@@ -68,7 +67,10 @@ func (c AuthorController) listAllAuthors(w http.ResponseWriter, r *http.Request)
 	output := c.Service.ListAllAuthors()
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(output)
+	err := json.NewEncoder(w).Encode(output)
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func (c AuthorController) findOneAuthor(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +84,10 @@ func (c AuthorController) findOneAuthor(w http.ResponseWriter, r *http.Request) 
 	output := c.Service.FindOneAuthor(uint(id))
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(output)
+	err = json.NewEncoder(w).Encode(output)
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 func (c AuthorController) updateAuthor(w http.ResponseWriter, r *http.Request) {
@@ -118,4 +123,6 @@ func (c AuthorController) deleteAuthor(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c.Service.DeleteAuthor(uint(id))
+
+	w.WriteHeader(http.StatusOK)
 }

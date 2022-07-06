@@ -2,10 +2,9 @@ package repositories
 
 import (
 	"errors"
+	"github.com/matheus-dr/go-test/src/database"
+	"github.com/matheus-dr/go-test/src/entities"
 	"time"
-
-	"github.com/matheus-dr/go-test/database"
-	"github.com/matheus-dr/go-test/entities"
 )
 
 type AuthorRepository struct {
@@ -13,14 +12,14 @@ type AuthorRepository struct {
 }
 
 var (
-	IN_MEMORY_AUTHOR_REPOSITORY = AuthorRepository{fakeDb: database.Database}
-	Authors                     = IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorTable.Authors
+	InMemoryAuthorRepository = AuthorRepository{fakeDb: database.Database}
+	Authors                  = InMemoryAuthorRepository.fakeDb.AuthorTable.Authors
 )
 
 func (r AuthorRepository) CreateAuthor(author entities.Author) {
-	IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorId += 1
+	InMemoryAuthorRepository.fakeDb.AuthorId += 1
 
-	author.Id = IN_MEMORY_AUTHOR_REPOSITORY.fakeDb.AuthorId
+	author.Id = InMemoryAuthorRepository.fakeDb.AuthorId
 	author.CreatedAt = time.Now().UTC()
 	author.UpdatedAt = time.Now().UTC()
 
@@ -38,7 +37,7 @@ func (r AuthorRepository) FindOneAuthor(id uint) (entities.Author, error) {
 		}
 	}
 
-	return entities.Author{}, errors.New("Author not found")
+	return entities.Author{}, errors.New("author not found")
 }
 
 func (r AuthorRepository) UpdateAuthor(id uint, input entities.Author) error {
@@ -60,7 +59,7 @@ func (r AuthorRepository) UpdateAuthor(id uint, input entities.Author) error {
 		}
 	}
 
-	return errors.New("Author not found")
+	return errors.New("author not found")
 }
 
 func (r AuthorRepository) DeleteAuthor(id uint) error {
@@ -72,5 +71,5 @@ func (r AuthorRepository) DeleteAuthor(id uint) error {
 		}
 	}
 
-	return errors.New("Author not found")
+	return errors.New("author not found")
 }
