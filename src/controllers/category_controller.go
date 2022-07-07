@@ -64,7 +64,7 @@ func (c CategoryController) createCategory(w http.ResponseWriter, r *http.Reques
 }
 
 func (c CategoryController) listAllCategories(w http.ResponseWriter, r *http.Request) {
-	output := c.Service.ListAllCategorys()
+	output := c.Service.ListAllCategories()
 
 	w.WriteHeader(http.StatusOK)
 	err := json.NewEncoder(w).Encode(output)

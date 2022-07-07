@@ -17,7 +17,7 @@ func (s CategoryService) CreateCategory(input dto.CreateCategoryDto) {
 	s.Repository.CreateCategory(category)
 }
 
-func (s CategoryService) ListAllCategorys() []dto.ListCategoryDto {
+func (s CategoryService) ListAllCategories() []dto.ListCategoryDto {
 	categories := s.Repository.ListAllCategories()
 
 	categoriesToReturn := make([]dto.ListCategoryDto, len(categories))

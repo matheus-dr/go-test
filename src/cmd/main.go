@@ -18,6 +18,7 @@ func main() {
 	router.HandleFunc("/category", categoryController.Handle)
 	router.HandleFunc("/category/id", categoryController.HandleParams)
 	router.HandleFunc("/book", bookController.Handle)
+	router.HandleFunc("/book/id", bookController.HandleParams)
 
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
