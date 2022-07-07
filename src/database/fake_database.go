@@ -7,6 +7,7 @@ import (
 type DatabaseStruct struct {
 	AuthorTable
 	CategoryTable
+	BookTable
 }
 
 var (
@@ -18,6 +19,10 @@ var (
 		CategoryTable: CategoryTable{
 			CategoryId: 0,
 			Categories: make([]entities.Category, 0),
+		},
+		BookTable: BookTable{
+			BookId: 0,
+			Books:  make([]entities.Book, 0),
 		},
 	}
 )

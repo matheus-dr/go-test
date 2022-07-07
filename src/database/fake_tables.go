@@ -13,3 +13,8 @@ type CategoryTable struct {
 	CategoryId uint
 	Categories []entities.Category
 }
+
+type BookTable struct {
+	BookId uint
+	Books  []entities.Book
+}
